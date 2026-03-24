@@ -1,6 +1,9 @@
 # StoreExample
 A sample Android store app that showcases a clean, scalable, and well-structured approach to application development.
 
+https://github.com/user-attachments/assets/7112f0f9-efda-4c7c-80e0-0bfa14156e64
+
+
 
 ## Architecture
 
