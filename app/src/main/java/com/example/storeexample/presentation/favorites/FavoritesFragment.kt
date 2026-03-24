@@ -41,12 +41,17 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ProductAdapter { productId ->
-            findNavController().navigate(
-                R.id.action_favoritesFragment_to_productDetailFragment,
-                bundleOf("productId" to productId)
-            )
-        }
+        val adapter = ProductAdapter(
+            onProductClick = { productId ->
+                findNavController().navigate(
+                    R.id.action_favoritesFragment_to_productDetailFragment,
+                    bundleOf("productId" to productId)
+                )
+            },
+            onFavoriteClick = { product ->
+                viewModel.removeFavorite(product.id)
+            }
+        )
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
@@ -55,6 +60,7 @@ class FavoritesFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.favorites.collect { favorites ->
                     adapter.submitList(favorites.map { it.toProduct() })
+                    adapter.setFavorites(favorites.map { it.id }.toSet())
                     binding.textViewEmpty.isVisible = favorites.isEmpty()
                     binding.recyclerView.isVisible = favorites.isNotEmpty()
                 }

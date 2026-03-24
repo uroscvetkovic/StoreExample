@@ -8,6 +8,8 @@
     <color name="color_surface">#E3DBBB</color>
     <color name="color_background">#F8F3E1</color>
 
+    <color name="color_favorite">#B85C5C</color>
+
     <color name="nav_selected">#41431B</color>
     <color name="nav_unselected">#9E9E9E</color>
     <color name="nav_tab_selected_bg">#AEB784</color>

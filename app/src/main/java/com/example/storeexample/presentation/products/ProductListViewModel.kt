@@ -2,12 +2,16 @@ package com.example.storeexample.presentation.products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.storeexample.data.local.entity.FavoriteProduct
 import com.example.storeexample.data.remote.model.Product
 import com.example.storeexample.data.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +22,10 @@ class ProductListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<ProductListUiState>(ProductListUiState.Loading)
     val uiState: StateFlow<ProductListUiState> = _uiState.asStateFlow()
+
+    val favoriteIds: StateFlow<Set<Int>> = repository.getFavorites()
+        .map { list -> list.map { it.id }.toSet() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
 
     private var skip = 0
     private var total = Int.MAX_VALUE
@@ -66,6 +74,17 @@ class ProductListViewModel @Inject constructor(
             } catch (e: Exception) {
                 isLoadingMore = false
                 _uiState.value = currentState.copy(isLoadingMore = false)
+            }
+        }
+    }
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            val fav = FavoriteProduct(product.id, product.title, product.category, product.price, product.rating, product.thumbnail)
+            if (product.id in favoriteIds.value) {
+                repository.removeFavorite(fav)
+            } else {
+                repository.addFavorite(fav)
             }
         }
     }

@@ -37,12 +37,17 @@ class ProductListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ProductAdapter { productId ->
-            findNavController().navigate(
-                ProductListFragmentDirections
-                    .actionProductListFragmentToProductDetailFragment(productId)
-            )
-        }
+        val adapter = ProductAdapter(
+            onProductClick = { productId ->
+                findNavController().navigate(
+                    ProductListFragmentDirections
+                        .actionProductListFragmentToProductDetailFragment(productId)
+                )
+            },
+            onFavoriteClick = { product ->
+                viewModel.toggleFavorite(product)
+            }
+        )
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
@@ -70,6 +75,14 @@ class ProductListFragment : Fragment() {
                     if (state is ProductListUiState.Error) {
                         binding.textViewError.text = state.message
                     }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.favoriteIds.collect { ids ->
+                    adapter.setFavorites(ids)
                 }
             }
         }

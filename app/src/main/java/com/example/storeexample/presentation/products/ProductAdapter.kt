@@ -5,13 +5,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.storeexample.R
 import com.example.storeexample.data.remote.model.Product
 import com.example.storeexample.databinding.ItemProductBinding
 import com.example.storeexample.util.ImageLoader
 
 class ProductAdapter(
-    private val onProductClick: (productId: Int) -> Unit
+    private val onProductClick: (productId: Int) -> Unit,
+    private val onFavoriteClick: ((product: Product) -> Unit)? = null
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DiffCallback()) {
+
+    private var favoriteIds: Set<Int> = emptySet()
+
+    fun setFavorites(ids: Set<Int>) {
+        val old = favoriteIds
+        favoriteIds = ids
+        for (i in 0 until currentList.size) {
+            val id = getItem(i).id
+            if ((id in old) != (id in ids)) notifyItemChanged(i)
+        }
+    }
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,6 +35,13 @@ class ProductAdapter(
             binding.textViewPrice.text = "$" + "%.2f".format(product.price)
             binding.textViewRating.text = "★ %.1f".format(product.rating)
             ImageLoader.load(product.thumbnail, binding.imageViewThumbnail)
+
+            val isFav = product.id in favoriteIds
+            binding.buttonFavorite.setImageResource(
+                if (isFav) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+            )
+            binding.buttonFavorite.setOnClickListener { onFavoriteClick?.invoke(product) }
+
             binding.root.setOnClickListener { onProductClick(product.id) }
         }
     }
