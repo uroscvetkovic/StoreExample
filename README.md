@@ -1,7 +1,8 @@
 # StoreExample
 A sample Android store app that showcases a clean, scalable, and well-structured approach to application development.
 
-https://github.com/user-attachments/assets/7112f0f9-efda-4c7c-80e0-0bfa14156e64
+
+https://github.com/user-attachments/assets/2e601615-fbc2-4313-99fd-c3f91f0ea60c
 
 
 
@@ -72,3 +73,7 @@ New releases are deployed gradually using Google Play's staged rollout feature:
 | `vanilla` | Base version of the app                     |
 | `partnerA` | Customized build for Partner A (Blue Store) |
 | `partnerB` | Customized build for Partner B (Red Store)  |
+
+<img  height="312" alt="Screenshot_20260325_004116" src="https://github.com/user-attachments/assets/f6a04b6e-0f2e-4401-8869-1444d336fca6" />
+<img  height="312" alt="Screenshot_20260325_004051" src="https://github.com/user-attachments/assets/15186ec9-c6dd-4dfa-9caa-0b8837e5573a" />
+
