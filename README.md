@@ -64,7 +64,8 @@ New releases are deployed gradually using Google Play's staged rollout feature:
 ### Build Variants
 
 | Flavor | Description |
-|---|---|
-| `vanilla` | Base version of the app |
-| `partnerA` | Customized build for Partner A |
-| `partnerB` | Customized build for Partner B |
+| Flavor | Description                                 |
+|---|---------------------------------------------|
+| `vanilla` | Base version of the app                     |
+| `partnerA` | Customized build for Partner A (Blue Store) |
+| `partnerB` | Customized build for Partner B (Red Store)  |
