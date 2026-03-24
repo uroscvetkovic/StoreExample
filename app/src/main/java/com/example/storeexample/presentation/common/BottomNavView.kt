@@ -23,6 +23,8 @@ class BottomNavView @JvmOverloads constructor(
 
     private val binding = ViewBottomNavBinding.inflate(LayoutInflater.from(context), this)
 
+    private var indicatorInitialized = false
+
     fun setup(navController: NavController) {
         binding.navItemProducts.setOnClickListener {
             if (navController.currentDestination?.id != R.id.productListFragment) {
@@ -37,7 +39,7 @@ class BottomNavView @JvmOverloads constructor(
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val isTab = destination.id == R.id.productListFragment || destination.id == R.id.favoritesFragment
-            if (isTab) doOnLayout { selectDestination(destination.id) }
+            if (isTab) post { selectDestination(destination.id) }
         }
     }
 
@@ -50,8 +52,10 @@ class BottomNavView @JvmOverloads constructor(
     }
 
     private fun initIndicator() {
-        if (binding.navIndicator.width != 0) return
+        if (indicatorInitialized) return
         val item = binding.navItemProducts
+        if (item.width == 0) return
+        indicatorInitialized = true
         binding.navIndicator.layoutParams = LayoutParams(item.width, item.height)
         binding.navIndicator.translationX = item.left.toFloat()
     }
