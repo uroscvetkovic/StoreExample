@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.storeexample.R
 import com.example.storeexample.data.remote.model.Product
+import com.bumptech.glide.Glide
 import com.example.storeexample.databinding.ItemProductBinding
-import com.example.storeexample.util.ImageLoader
 
 class ProductAdapter(
     private val onProductClick: (productId: Int) -> Unit,
@@ -34,7 +34,9 @@ class ProductAdapter(
             binding.textViewCategory.text = product.category
             binding.textViewPrice.text = "$" + "%.2f".format(product.price)
             binding.textViewRating.text = "★ %.1f".format(product.rating)
-            ImageLoader.load(product.thumbnail, binding.imageViewThumbnail)
+            Glide.with(binding.imageViewThumbnail)
+                .load(product.thumbnail)
+                .into(binding.imageViewThumbnail)
             binding.root.setOnClickListener { onProductClick(product.id) }
             binding.buttonFavorite.setOnClickListener { onFavoriteClick?.invoke(product) }
             updateFavoriteIcon(product.id in favoriteIds)

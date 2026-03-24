@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.storeexample.R
+import com.bumptech.glide.Glide
 import com.example.storeexample.databinding.FragmentProductDetailBinding
-import com.example.storeexample.util.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -67,7 +67,9 @@ class ProductDetailFragment : Fragment() {
                         binding.textViewDescription.text = p.description
                         binding.textViewBrand.text = p.brand ?: ""
                         binding.textViewBrand.isVisible = p.brand != null
-                        ImageLoader.load(p.thumbnail, binding.imageViewProduct)
+                        Glide.with(binding.imageViewProduct)
+                            .load(p.thumbnail)
+                            .into(binding.imageViewProduct)
                     }
 
                     if (state is ProductDetailUiState.Error) {
