@@ -40,6 +40,17 @@ di/             → Hilt dependency injection modules
 | Dependency injection | Hilt |
 | Async / reactive | Coroutines + Flow |
 
+## Staged Rollout Strategy
+
+> Based on [Google Play staged rollout documentation](https://support.google.com/googleplay/android-developer/answer/6346149) and [Android App Rollout Tips – ProAndroidDev](https://proandroiddev.com/ready-aim-release-android-app-rollout-tips-1bc6f851e6fb)
+
+New releases are deployed gradually using Google Play's staged rollout feature:
+
+1. **Internal testing** — release to the internal team for smoke testing
+2. **5% rollout** — monitor crash rate and ANRs via Play Console
+3. **20% → 50% → 100%** — expand in stages if metrics remain stable
+4. **Halt if needed** — rollout can be paused and the previous version remains active for unaffected users
+
 ## Running the App
 
 **Prerequisites:** Android Studio, JDK 11+
