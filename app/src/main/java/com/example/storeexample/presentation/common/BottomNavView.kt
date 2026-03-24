@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.core.widget.ImageViewCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import com.example.storeexample.R
 import com.example.storeexample.databinding.ViewBottomNavBinding
 
@@ -28,12 +29,18 @@ class BottomNavView @JvmOverloads constructor(
     fun setup(navController: NavController) {
         binding.navItemProducts.setOnClickListener {
             if (navController.currentDestination?.id != R.id.productListFragment) {
-                navController.navigate(R.id.productListFragment)
+                navController.navigate(R.id.productListFragment, null, NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_left)
+                    .setExitAnim(R.anim.slide_out_right)
+                    .build())
             }
         }
         binding.navItemFavorites.setOnClickListener {
             if (navController.currentDestination?.id != R.id.favoritesFragment) {
-                navController.navigate(R.id.favoritesFragment)
+                navController.navigate(R.id.favoritesFragment, null, NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_right)
+                    .setExitAnim(R.anim.slide_out_left)
+                    .build())
             }
         }
 
