@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Hero image -->
             <ImageView
                 android:id="@+id/image_view_product"
                 android:layout_width="match_parent"
@@ -25,7 +24,6 @@
                 android:background="@color/color_surface"
                 android:contentDescription="@null" />
 
-            <!-- Content -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +57,6 @@
                     android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
                     android:textColor="@color/color_secondary" />
 
-                <!-- Price + Rating row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +94,6 @@
                     android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:textColor="@color/color_secondary" />
 
-                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -118,7 +114,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Back button overlaid on the image -->
     <ImageButton
         android:id="@+id/button_back"
         android:layout_width="40dp"
@@ -129,7 +124,6 @@
         android:tint="@color/color_primary"
         android:contentDescription="@null" />
 
-    <!-- Favorite button overlaid top-right -->
     <ImageButton
         android:id="@+id/button_favorite"
         android:layout_width="40dp"
