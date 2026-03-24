@@ -138,7 +138,7 @@
         android:layout_gravity="top|end"
         android:background="@drawable/bottom_nav_background"
         android:src="@drawable/ic_favorite_border"
-        android:tint="@color/color_primary"
+        android:tint="@color/color_favorite"
         android:contentDescription="@null" />
 
     <ProgressBar

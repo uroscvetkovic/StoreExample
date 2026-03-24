@@ -45,7 +45,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/nav_favorites"
-                android:src="@drawable/ic_favorite_border" />
+                android:src="@drawable/ic_favorite" />
 
         </LinearLayout>
 
