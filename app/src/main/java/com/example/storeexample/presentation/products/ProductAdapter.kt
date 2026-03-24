@@ -9,7 +9,9 @@ import com.example.storeexample.data.remote.model.Product
 import com.example.storeexample.databinding.ItemProductBinding
 import com.example.storeexample.util.ImageLoader
 
-class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DiffCallback()) {
+class ProductAdapter(
+    private val onProductClick: (productId: Int) -> Unit
+) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(DiffCallback()) {
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -20,6 +22,7 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Di
             binding.textViewPrice.text = "$" + "%.2f".format(product.price)
             binding.textViewRating.text = "★ %.1f".format(product.rating)
             ImageLoader.load(product.thumbnail, binding.imageViewThumbnail)
+            binding.root.setOnClickListener { onProductClick(product.id) }
         }
     }
 

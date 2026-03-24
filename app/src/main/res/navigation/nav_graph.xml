@@ -9,12 +9,26 @@
         android:id="@+id/productListFragment"
         android:name="com.example.storeexample.presentation.products.ProductListFragment"
         android:label="@string/nav_products"
-        tools:layout="@layout/fragment_product_list" />
+        tools:layout="@layout/fragment_product_list">
+        <action
+            android:id="@+id/action_productListFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.storeexample.presentation.favorites.FavoritesFragment"
         android:label="@string/nav_favorites"
         tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.storeexample.presentation.products.ProductDetailFragment"
+        android:label="@string/nav_product_detail"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="productId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

@@ -3,4 +3,5 @@
     <string name="toolbar_title">Dummy Store</string>
     <string name="nav_products">Products</string>
     <string name="nav_favorites">Favorites</string>
+    <string name="nav_product_detail">Product</string>
 </resources>
