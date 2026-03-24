@@ -22,7 +22,7 @@ class ProductAdapter(
         favoriteIds = ids
         for (i in 0 until currentList.size) {
             val id = getItem(i).id
-            if ((id in old) != (id in ids)) notifyItemChanged(i)
+            if ((id in old) != (id in ids)) notifyItemChanged(i, PAYLOAD_FAVORITE)
         }
     }
 
@@ -35,14 +35,15 @@ class ProductAdapter(
             binding.textViewPrice.text = "$" + "%.2f".format(product.price)
             binding.textViewRating.text = "★ %.1f".format(product.rating)
             ImageLoader.load(product.thumbnail, binding.imageViewThumbnail)
+            binding.root.setOnClickListener { onProductClick(product.id) }
+            binding.buttonFavorite.setOnClickListener { onFavoriteClick?.invoke(product) }
+            updateFavoriteIcon(product.id in favoriteIds)
+        }
 
-            val isFav = product.id in favoriteIds
+        fun updateFavoriteIcon(isFav: Boolean) {
             binding.buttonFavorite.setImageResource(
                 if (isFav) R.drawable.ic_favorite else R.drawable.ic_favorite_border
             )
-            binding.buttonFavorite.setOnClickListener { onFavoriteClick?.invoke(product) }
-
-            binding.root.setOnClickListener { onProductClick(product.id) }
         }
     }
 
@@ -55,8 +56,20 @@ class ProductAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isNotEmpty() && payloads[0] == PAYLOAD_FAVORITE) {
+            holder.updateFavoriteIcon(getItem(position).id in favoriteIds)
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
     private class DiffCallback : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product) = oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: Product, newItem: Product) = oldItem == newItem
+    }
+
+    companion object {
+        private const val PAYLOAD_FAVORITE = "favorite"
     }
 }
