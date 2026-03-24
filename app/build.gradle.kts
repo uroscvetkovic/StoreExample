@@ -20,6 +20,22 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "partner"
+    productFlavors {
+        create("vanilla") {
+            dimension = "partner"
+            applicationId = "com.example.storeexample"
+        }
+        create("partnerA") {
+            dimension = "partner"
+            applicationId = "com.example.storeexample.partnera"
+        }
+        create("partnerB") {
+            dimension = "partner"
+            applicationId = "com.example.storeexample.partnerb"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

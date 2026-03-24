@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_primary">#5C1A1A</color>
+    <color name="color_secondary">#B87D5B</color>
+    <color name="color_surface">#E8CEBE</color>
+    <color name="color_background">#FAF0EE</color>
+    <color name="color_favorite">#B85C5C</color>
+    <color name="nav_selected">#5C1A1A</color>
+    <color name="nav_unselected">#9E9E9E</color>
+    <color name="nav_tab_selected_bg">#B87D5B</color>
+</resources>
