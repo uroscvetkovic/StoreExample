@@ -19,6 +19,15 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar_load_more"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="88dp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/text_view_error"
         android:layout_width="wrap_content"

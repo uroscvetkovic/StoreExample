@@ -19,25 +19,68 @@ class ProductListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ProductListUiState>(ProductListUiState.Loading)
     val uiState: StateFlow<ProductListUiState> = _uiState.asStateFlow()
 
+    private var skip = 0
+    private var total = Int.MAX_VALUE
+    private var isLoadingMore = false
+
     init {
         loadProducts()
     }
 
     fun loadProducts() {
+        skip = 0
+        total = Int.MAX_VALUE
         viewModelScope.launch {
             _uiState.value = ProductListUiState.Loading
             try {
-                val response = repository.getProducts(limit = 20, skip = 0)
-                _uiState.value = ProductListUiState.Success(response.products)
+                val response = repository.getProducts(limit = PAGE_SIZE, skip = 0)
+                skip = PAGE_SIZE
+                total = response.total
+                _uiState.value = ProductListUiState.Success(
+                    products = response.products,
+                    hasMore = skip < total
+                )
             } catch (e: Exception) {
                 _uiState.value = ProductListUiState.Error(e.message ?: "Something went wrong")
             }
         }
     }
+
+    fun loadNextPage() {
+        if (isLoadingMore || skip >= total) return
+        val currentState = _uiState.value as? ProductListUiState.Success ?: return
+
+        isLoadingMore = true
+        _uiState.value = currentState.copy(isLoadingMore = true)
+
+        viewModelScope.launch {
+            try {
+                val response = repository.getProducts(limit = PAGE_SIZE, skip = skip)
+                skip += PAGE_SIZE
+                isLoadingMore = false
+                _uiState.value = ProductListUiState.Success(
+                    products = currentState.products + response.products,
+                    isLoadingMore = false,
+                    hasMore = skip < total
+                )
+            } catch (e: Exception) {
+                isLoadingMore = false
+                _uiState.value = currentState.copy(isLoadingMore = false)
+            }
+        }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
 }
 
 sealed class ProductListUiState {
     object Loading : ProductListUiState()
-    data class Success(val products: List<Product>) : ProductListUiState()
+    data class Success(
+        val products: List<Product>,
+        val isLoadingMore: Boolean = false,
+        val hasMore: Boolean = true
+    ) : ProductListUiState()
     data class Error(val message: String) : ProductListUiState()
 }

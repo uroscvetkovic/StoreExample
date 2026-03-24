@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.storeexample.databinding.FragmentProductListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +24,6 @@ class ProductListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProductListViewModel by viewModels()
-    private val adapter = ProductAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,8 +37,24 @@ class ProductListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ProductAdapter { productId ->
+            findNavController().navigate(
+                ProductListFragmentDirections
+                    .actionProductListFragmentToProductDetailFragment(productId)
+            )
+        }
+
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val total = layoutManager.itemCount
+                if (lastVisible >= total - 3) viewModel.loadNextPage()
+            }
+        })
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -46,8 +63,13 @@ class ProductListFragment : Fragment() {
                     binding.recyclerView.isVisible = state is ProductListUiState.Success
                     binding.textViewError.isVisible = state is ProductListUiState.Error
 
-                    if (state is ProductListUiState.Success) adapter.submitList(state.products)
-                    if (state is ProductListUiState.Error) binding.textViewError.text = state.message
+                    if (state is ProductListUiState.Success) {
+                        adapter.submitList(state.products)
+                        binding.progressBarLoadMore.isVisible = state.isLoadingMore
+                    }
+                    if (state is ProductListUiState.Error) {
+                        binding.textViewError.text = state.message
+                    }
                 }
             }
         }
