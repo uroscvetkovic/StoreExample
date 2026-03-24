@@ -44,9 +44,7 @@ class ProductListFragment : Fragment() {
                         .actionProductListFragmentToProductDetailFragment(productId)
                 )
             },
-            onFavoriteClick = { product ->
-                viewModel.toggleFavorite(product)
-            }
+            onFavoriteClick = { product -> viewModel.toggleFavorite(product) }
         )
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -56,8 +54,7 @@ class ProductListFragment : Fragment() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
-                val total = layoutManager.itemCount
-                if (lastVisible >= total - 3) viewModel.loadNextPage()
+                if (lastVisible >= layoutManager.itemCount - 3) viewModel.loadNextPage()
             }
         })
 
@@ -81,9 +78,7 @@ class ProductListFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.favoriteIds.collect { ids ->
-                    adapter.setFavorites(ids)
-                }
+                viewModel.favoriteIds.collect { ids -> adapter.setFavorites(ids) }
             }
         }
     }

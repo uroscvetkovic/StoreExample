@@ -57,10 +57,8 @@ class ProductListViewModel @Inject constructor(
     fun loadNextPage() {
         if (isLoadingMore || skip >= total) return
         val currentState = _uiState.value as? ProductListUiState.Success ?: return
-
         isLoadingMore = true
         _uiState.value = currentState.copy(isLoadingMore = true)
-
         viewModelScope.launch {
             try {
                 val response = repository.getProducts(limit = PAGE_SIZE, skip = skip)
@@ -68,7 +66,6 @@ class ProductListViewModel @Inject constructor(
                 isLoadingMore = false
                 _uiState.value = ProductListUiState.Success(
                     products = currentState.products + response.products,
-                    isLoadingMore = false,
                     hasMore = skip < total
                 )
             } catch (e: Exception) {
@@ -80,7 +77,10 @@ class ProductListViewModel @Inject constructor(
 
     fun toggleFavorite(product: Product) {
         viewModelScope.launch {
-            val fav = FavoriteProduct(product.id, product.title, product.category, product.price, product.rating, product.thumbnail)
+            val fav = FavoriteProduct(
+                product.id, product.title, product.category,
+                product.price, product.rating, product.thumbnail
+            )
             if (product.id in favoriteIds.value) {
                 repository.removeFavorite(fav)
             } else {
