@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.example.storeexample.R
 import com.example.storeexample.databinding.FragmentProductDetailBinding
 import com.example.storeexample.util.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +38,17 @@ class ProductDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonBack.setOnClickListener { findNavController().navigateUp() }
+        binding.buttonFavorite.setOnClickListener { viewModel.toggleFavorite() }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isFavorite.collect { isFav ->
+                    binding.buttonFavorite.setImageResource(
+                        if (isFav) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                    )
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
