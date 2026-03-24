@@ -36,7 +36,8 @@ class BottomNavView @JvmOverloads constructor(
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            doOnLayout { selectDestination(destination.id) }
+            val isTab = destination.id == R.id.productListFragment || destination.id == R.id.favoritesFragment
+            if (isTab) doOnLayout { selectDestination(destination.id) }
         }
     }
 
